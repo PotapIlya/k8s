@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kuber-app-service
+spec:
+  # sessionAffinity: ClientIP # стучаться на один и тот де pod
+  type: LoadBalancer
+  selector:
+    app: kuber-app
+  ports:
+  - port: 80
+    nodePort: 30000
+    targetPort: http

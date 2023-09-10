@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-back
+  namespace: prod
+spec:
+  rules:
+  - host: berloga.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/api/"
+        backend:
+          service:
+            name: service-back
+            port: 
+              number: 80

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-back
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-back-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-back-pod
+    spec:
+      containers:
+      - name: container-back
+        image: potap2001/back:k8s
+        resources:
+
+        ports:
+        - name: http 
+          containerPort: 3000
+        env: 
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: config-db
+              key: POSTGRES_HOST
+
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: config-db
+              key: POSTGRES_USER
+
+        - name: DB_PASS
+          valueFrom:
+            configMapKeyRef:
+              name: config-db
+              key: POSTGRES_PASSWORD
+
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: config-db
+              key: POSTGRES_DB
+
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: config-db
+              key: POSTGRES_PORT

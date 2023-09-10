@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-deployment
+spec:
+  selector:
+    matchLabels:
+      app: gitlab-deployment-pod
+  template:
+    metadata:
+      labels:
+        app: gitlab-deployment-pod
+    spec:
+      containers:
+      - name: gitlab-deployment-container
+        image: gitlab/gitlab-ce:latest
+        resources: {}
+        ports:
+        - name: gitlab-port
+          containerPort: 80
+        env:
+          - name: GITLAB_OMNIBUS_CONFIG
+            value: external_url 'http://localhost'
+        volumeMounts:
+          - name: gitlab-pvc-config
+            mountPath: /etc/gitlab
+          - name: gitlab-pvc-logs
+            mountPath: /var/log/gitlab
+          - name: gitlab-pvc-data
+            mountPath: /var/opt/gitlab
+      volumes:
+        - name: gitlab-pvc-config
+          persistentVolumeClaim:
+            claimName: gitlab-pvc-config
+        - name: gitlab-pvc-logs
+          persistentVolumeClaim:
+            claimName: gitlab-pvc-logs
+        - name: gitlab-pvc-data
+          persistentVolumeClaim:
+            claimName: gitlab-pvc-data

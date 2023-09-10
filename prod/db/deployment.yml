@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-db
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-db-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-db-pod
+    spec:
+      containers:
+      - name: container-db
+        image: postgres:12.13-alpine3.17
+        resources:
+
+        envFrom:
+          - configMapRef:
+              name: config-db
+        ports:
+        - name: db
+          containerPort: 5432
+        volumeMounts:
+          - name: pod-pg-storage
+            mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: pod-pg-storage
+          persistentVolumeClaim:
+            claimName: pvc-pg

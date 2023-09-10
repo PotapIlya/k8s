@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-bokovets-kuber-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bokovets-kuber-v1
+  template:
+    metadata:
+      labels:
+        app: bokovets-kuber-v1
+    spec:
+      containers:
+      - name: bokovets-bokover-v1
+        image: bokovets/kuber:v1.0
+        resources:
+          #
+        ports:
+        - name: http
+          containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-bokovets-kuber-v1
+spec:
+  selector:
+    app: bokovets-kuber-v1
+  ports:
+  - port: 80
+    targetPort: http

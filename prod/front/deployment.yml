@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-front
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deployment-front-pod
+  template:
+    metadata:
+      labels:
+        app: deployment-front-pod
+    spec:
+      containers:
+      - name: container-front
+        image: potap2001/front:k8s
+        env:
+        - name: VUE_APP_HOST_BACK
+          value: "http://berloga.com/"
+        resources:
+
+        ports:
+        - name: http
+          containerPort: 80
